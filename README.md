@@ -18,7 +18,7 @@ which is a Unix based RNA-seq quantification module; it uses SAM/BAM
 genome alignment files as input and creates gene, exon, and junctions counts.
 
 --------------
-\*: Univa® is a registered trademark of Univa Corporation
+\* Univa® is a registered trademark of Univa Corporation
 
 Version
 -------
