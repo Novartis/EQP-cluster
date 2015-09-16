@@ -245,26 +245,33 @@ cd $PROJECT_DIR
 PROJECT_DATA_DIR="$PROJECT_DIR/exon-pipeline-files"
 if [ ! -d $PROJECT_DATA_DIR ]
 then
-  if [ -f $PROJECT_DATA_DIR.tgz ]
+ echo "Directory "
+ echo "  $PROJECT_DIR/exon-pipeline-files"
+ echo "not found. Please make sure that the download from GitHub is complete and no"
+ echo "file or directory is moved ... exiting."
+ exit 1
+fi
+
+cd exon-pipeline-files
+if [ -f exon-pipeline-files.tgz.00 ]
+then
+  echo "Extracting directory exon-pipeline-files"
+  cat exon-pipeline-files.tgz.* | tar xz
+  if [ $? -ne 0 ]
   then
-    echo "Extracting directory $PROJECT_DATA_DIR"
-    tar xfz $PROJECT_DATA_DIR.tgz
-    if [ $? -ne 0 ]
-    then
-      echo "Extraction of directory $PROJECT_DATA_DIR from file $PROJECT_DATA_DIR.tgz failed ... exiting."
-      exit 1
-    fi
-    rm $PROJECT_DATA_DIR.tgz
-  else
-    echo "Neither file"
-    echo "     $PROJECT_DATA_DIR.tgz"
-    echo "nor directory"
-    echo "     $PROJECT_DATA_DIR"
-    echo "found. Please make sure that the download from GitHub is complete and no"
-    echo "file or directory is moved ... exiting."
+    echo "Extraction of directory exon-pipeline-files failed ... exiting."
     exit 1
   fi
+  rm exon-pipeline-files.tgz.*
+else
+  echo "File"
+  echo "  exon-pipeline-files.tgz.00"
+  echo "found. Please make sure that the download from GitHub is complete and no"
+  echo "file or directory is moved ... exiting."
+  exit 1
 fi
+
+cd ..
 
 FORCE="TRUE"
 
