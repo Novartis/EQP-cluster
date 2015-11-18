@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 ## Copyright 2015 Novartis Institutes for BioMedical Research
 ## Inc.Licensed under the Apache License, Version 2.0 (the "License"); you
@@ -15,7 +15,7 @@
 
 #$ -cwd
 #$ -j y
-#$ -S /bin/sh
+#$ -S /bin/bash
 #$ -R y
 #$ -V
 

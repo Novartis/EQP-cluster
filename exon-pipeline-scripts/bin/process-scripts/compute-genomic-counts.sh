@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 ## Copyright 2015 Novartis Institutes for BioMedical Research
 ## Inc.Licensed under the Apache License, Version 2.0 (the "License"); you
@@ -15,7 +15,7 @@
 
 #$ -cwd
 #$ -j y
-#$ -S /bin/sh
+#$ -S /bin/bash
 #$ -V
 
 PROG_NAME=`basename $0`
@@ -549,7 +549,7 @@ GENE_MODEL_PREFIX=
 SETUP_SCRIPT=$PROJECT_DIR/bin/setup.sh
 if [[ -x $SETUP_SCRIPT ]]
 then
-  source $SETUP_SCRIPT
+  . $SETUP_SCRIPT
   GENE_MODEL_PREFIX=$FILE_BASE
 elif [ -e $PROJECT_DIR/exon-pipeline-files ]
 then
