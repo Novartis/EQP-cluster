@@ -169,7 +169,7 @@ checkVersion ()
     exit 1
   fi
 
-  if [ "$VERSION2_SECOND" -gt "$VERSION1_SECOND" ]
+  if [ "$VERSION1_SECOND" -gt "$VERSION2_SECOND" ]
   then
     return
   fi
@@ -263,11 +263,15 @@ then
     exit 1
   fi
   rm exon-pipeline-files.tgz.*
-else
-  echo "File"
+elif [ ! -d genome-files -o ! -d fasta-files -o ! -d map-files -o ! bed-files ]
+then
+  echo "Neither file"
   echo "  exon-pipeline-files.tgz.00"
-  echo "found. Please make sure that the download from GitHub is complete and no"
-  echo "file or directory is moved ... exiting."
+  echo "nor directories"
+  echo "  genome-files, fasta-files, map-files, and bed-files"
+  echo "found in directory exon-pipeline-files. Please make sure that the download"
+  echo "from GitHub is complete, all tar files are extracted, and no file or directory"
+  echo "is moved ... exiting."
   exit 1
 fi
 
@@ -284,7 +288,7 @@ FORCE="TRUE"
 SETUP_FILE=$PROJECT_DATA_DIR/setup.sh
 if [ -f $SETUP_FILE ]
 then
-  source $SETUP_FILE
+  . $SETUP_FILE
   ## echo "Copying file $SETUP_FILE for read length $READ_LENGTH to $PROJECT_DIR/bin"
   cp -f $SETUP_FILE $PROJECT_DIR/bin
 else
