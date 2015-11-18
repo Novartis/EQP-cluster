@@ -543,7 +543,7 @@ then
     exit 1
   fi
 fi
-source $PROG_DIR/setup.sh
+. $PROG_DIR/setup.sh
 if [ "$OPERATION" = "compute-counts" -o "$OPERATION" = "align-all" -o "$OPERATION" = "align-transcripts" ]
 then
   if [ "$STRAND_SPECIFIC" = "TRUE" ]
@@ -637,20 +637,20 @@ fi
 GENOME_ALIGNER="$ALIGNER"
 
 ALIGNER_UNGAPPED_FILTER=`echo $ALIGNER | sed -n '/bowtie2/Ip'`
-if [[ ! -z "$ALIGNER_UNGAPPED_FILTER" ]]
+if [ "$ALIGNER_UNGAPPED_FILTER" != "" ]
 then
   ALIGNER_TYPE="ungapped"
   ALIGNMENT_REF="combined"
 fi
 
 ALIGNER_GENOMIC_FILTER=`echo $ALIGNER | sed -n '/tophat2\|star\|splicemap\|eqp\|hisat/Ip'`
-if [[ ! -z "$ALIGNER_GENOMIC_FILTER" ]]
+if [ "$ALIGNER_GENOMIC_FILTER" != "" ]
 then
   ALIGNER_TYPE="genomic"
   ALIGNMENT_REF="genome"
 fi
 
-if [[ -z "$ALIGNER_GENOMIC_FILTER" && -z "$ALIGNER_UNGAPPED_FILTER" ]]
+if [ "$ALIGNER_GENOMIC_FILTER" = "" -a "$ALIGNER_UNGAPPED_FILTER" = "" ]
 then
   echo "Unknown aligner: $ALIGNER ... exiting."
   exit 1
@@ -777,7 +777,7 @@ then
 fi
 
 ## Make sure that CLASSPATH is not empty
-if [[ -z $CLASSPATH ]]
+if [ "$CLASSPATH" = "" ]
 then
   export CLASSPATH=$HOME
 fi
@@ -1104,7 +1104,7 @@ SAMPLE_EQP_JUNCTION_COUNT_FILES=""
 ################################################################################
 
 SAMPLES_DIR=$PROJECT_DIR/$SAMPLES_SUBDIR
-if [[ -z "$SAMPLES_OPT" ]]
+if [ "$SAMPLES_OPT" = "" ]
 then
   SAMPLES=`ls -1d $SAMPLES_DIR/*/ | sed -e "s;$SAMPLES_DIR/;;" | sed -e 's;/$;;' | fgrep -v bin | fgrep -v files | tr '\n' ' '`
 else
@@ -1181,7 +1181,8 @@ do
   fi
 
   CHUNKS=`ls -1 $SAMPLE_DIR | grep '^C[0-9][0-9][0-9]$' | tr '\n' ' '`
-  if [[ -z "$CHUNKS" && "$SPLIT" = "FALSE" ]]
+
+  if [ "$CHUNKS" = "" -a "$SPLIT" = "FALSE" ]
   then
     echo "Please split up the Fastq file(s) of sample $SAMPLE into chunks by calling:"
     echo
@@ -1191,7 +1192,7 @@ do
     continue
   fi
 
-  if [[ -z "$CHUNKS" || "$SPLIT" = "TRUE" ]]
+  if [ "$CHUNKS" = "" -o "$SPLIT" = "TRUE" ]
   then
     if [ "$PAIRED_END" = "TRUE" ]
     then
@@ -1204,7 +1205,7 @@ do
         FASTQ_FILES_1=`ls -1 $SAMPLE_DIR | grep "${SAMPLE}_[1-9]_1.f[ast]*q[.gz]*" | tr '\n' ' ' | sed -e 's/ /#/g'`
         FASTQ_FILES_2=`ls -1 $SAMPLE_DIR | grep "${SAMPLE}_[1-9]_2.f[ast]*q[.gz]*" | tr '\n' ' ' | sed -e 's/ /#/g'`    
     
-        if [[ -z $FASTQ_FILES_1 ]]
+        if [ "$FASTQ_FILES_1" = "" ]
         then
           echo "Paired-end mode: No Fastq files for first read (_1) in $SAMPLE_DIR found ... exiting."
           exit 1
@@ -1213,11 +1214,8 @@ do
 
       if [ "$FASTQ_FILES_2" = "" ]
       then
-        if [[ -z $FASTQ_FILES_2 ]]
-        then
-          echo "Paired-end mode: No Fastq files for second read (_2) in $SAMPLE_DIR found ... exiting."
-          exit 1
-        fi
+        echo "Paired-end mode: No Fastq files for second read (_2) in $SAMPLE_DIR found ... exiting."
+        exit 1
       fi
     
       FASTQ_FILES_1_NUM=`echo $FASTQ_FILES_1 | tr '#' '\n' | wc -l`
@@ -1231,7 +1229,7 @@ do
       FASTQ_FILES_2_OPTION="-2 $FASTQ_FILES_2"
     else
       FASTQ_FILES_1=`ls -1 $SAMPLE_DIR | grep "${SAMPLE}.*[.]f[ast]*q[.gz]*" | fgrep -v "combined" | tr '\n' '#'`
-      if [[ -z $FASTQ_FILES_1 ]]
+      if [ "$FASTQ_FILES_1" = "" ]
       then
         echo "Single read mode: No Fastq files in $SAMPLE_DIR found ... exiting."
         exit 1
